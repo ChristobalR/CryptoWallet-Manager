@@ -33,7 +33,7 @@ const Navbar = ({ userData }) => {
         <img 
           src="/3.png" 
           alt="Logo" 
-          style={{ height: "50px", width: "auto" }}
+          style={{ height: "35px", width: "auto" }}
         />
 
         {/* Verifica si el usuario está logueado */}
