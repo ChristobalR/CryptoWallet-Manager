@@ -5,10 +5,17 @@ import Login from "./layouts/login";
 import Landing from "./layouts/landing";
 import Register from "./layouts/register";
 import useTokenVerification from "./hooks/useTokenVerification";
+import useFetchWalletInfo from "./hooks/fetchWalletInfo";
+import { useEffect } from "react";
 
 function App({ handleTheme }) {
   const { loading, logged } = useTokenVerification();
+  const { data, loading: loadingWalletInfo, error } = useFetchWalletInfo("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa");
 
+  // Puedes revisar el contenido de `data` en la consola
+ useEffect(()=>{
+
+ },[])
   if (loading) {
     return (
       <Container
@@ -17,7 +24,7 @@ function App({ handleTheme }) {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          backgroundColor: "#121212",
+          
         }}
       >
         <CircularProgress color="primary" />

@@ -4,14 +4,19 @@ import Navbar from "../components/navbar";
 import WalletHeader from "../components/walletHeader";
 import useFetchProfile from "../hooks/useFetchProfile";
 import useAddWallet from "../hooks/useAddWallet";
+import useBitcoinWalletInfo from "../hooks/fetchWalletInfo"; //
+
 const Profile = () => {
-  
-const  { userData, error } = useFetchProfile()
-const { newWalletName, setNewWalletName, showForm,  setShowForm , handleAddWallet} = useAddWallet() 
+  const { userData, error } = useFetchProfile();
+  const { newWalletName, setNewWalletName, showForm, setShowForm, handleAddWallet } = useAddWallet();
 
   const [selectedWallet, setSelectedWallet] = useState(null);
   const [showPrivateKey, setShowPrivateKey] = useState(false);
- 
+
+  
+  const { balance, transactions, loading, error: walletError } = useBitcoinWalletInfo(
+    selectedWallet ? selectedWallet.publicKey : null
+  );
 
   return (
     <>
@@ -22,8 +27,7 @@ const { newWalletName, setNewWalletName, showForm,  setShowForm , handleAddWalle
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          marginTop:"20px"
-         
+          marginTop: "20px",
         }}
       >
         {selectedWallet ? (
@@ -54,9 +58,43 @@ const { newWalletName, setNewWalletName, showForm,  setShowForm , handleAddWalle
                 {showPrivateKey ? "Ocultar" : "Mostrar"}
               </Button>
             </Typography>
+
+            {/* Mostrar balance y transacciones si están disponibles */}
+            {loading ? (
+              <Typography variant="body1" sx={{ color: "#ffffff" }}>
+                Cargando balance y transacciones...
+              </Typography>
+            ) : walletError ? (
+              <Typography variant="body1" sx={{ color: "#ff4c4c" }}>
+                Error al obtener los datos: {walletError}
+              </Typography>
+            ) : (
+              <>
+                <Typography variant="body1" sx={{ color: "#ffffff" }}>
+                  Balance: ${balance} USD
+                </Typography>
+
+                <Typography variant="h6" sx={{ color: "#39ff14", marginTop: "10px" }}>
+                  Últimas 3 transacciones:
+                </Typography>
+
+                {transactions.length > 0 ? (
+                  transactions.map((tx, index) => (
+                    <Typography key={index} variant="body2" sx={{ color: "#ffffff" }}>
+                      Monto: ${tx.amountUSD} USD, Fecha: {tx.date}
+                    </Typography>
+                  ))
+                ) : (
+                  <Typography variant="body2" sx={{ color: "#ffffff" }}>
+                    No hay transacciones recientes.
+                  </Typography>
+                )}
+              </>
+            )}
+
             <Typography
               variant="body2"
-              sx={{ cursor: "pointer", color: "#39ff14" }}
+              sx={{ cursor: "pointer", color: "#39ff14", marginTop: "20px" }}
               onClick={() => {
                 setSelectedWallet(null);
                 setShowPrivateKey(false);
@@ -67,10 +105,7 @@ const { newWalletName, setNewWalletName, showForm,  setShowForm , handleAddWalle
           </Box>
         ) : (
           <>
-          
-            {userData &&
-            userData.user.wallets &&
-            userData.user.wallets.length > 0 ? (
+            {userData && userData.user.wallets && userData.user.wallets.length > 0 ? (
               userData.user.wallets.map((map) => (
                 <WalletHeader
                   key={map._id}

@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 
 const useFetchPrices = () => {
-
-
   const [prices, setPrices] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,8 +8,9 @@ const useFetchPrices = () => {
 
   const fetchPrices = async () => {
     try {
+      
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin&vs_currencies=usd"
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,cardano,binancecoin,solana&vs_currencies=usd"
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -28,30 +27,28 @@ const useFetchPrices = () => {
   useEffect(() => {
     fetchPrices();
 
-    // Actualiza los precios cada 2 segundos
     const interval = setInterval(() => {
-      setHighlightedPrice(true); // Activa el efecto de resaltado
+      setHighlightedPrice(true);
       setPrices((prevPrices) => {
         if (!prevPrices) return null;
 
         const updatedPrices = {};
         Object.entries(prevPrices).forEach(([key, value]) => {
-          // Cambia el precio con un 0.0001% de variación
-          const change = (Math.random() * 0.0002 - 0.0001); // Rango de cambio
+          const change = Math.random() * 0.0002 - 0.0001;
           updatedPrices[key] = {
-            usd: (value.usd * (1 + change)).toFixed(4), // Ajusta el precio
+            usd: (value.usd * (1 + change)).toFixed(4),
           };
         });
         return updatedPrices;
       });
 
-      setTimeout(() => setHighlightedPrice(false), 500); // Resalta por 500 ms
+      setTimeout(() => setHighlightedPrice(false), 500);
     }, 2000);
 
-    return () => clearInterval(interval); // Limpia el intervalo al desmontar
+    return () => clearInterval(interval);
   }, []);
 
-  return { prices, loading, error, highlightedPrice }
+  return { prices, loading, error, highlightedPrice };
 };
 
-export default useFetchPrices
+export default useFetchPrices;

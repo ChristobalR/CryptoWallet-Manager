@@ -52,7 +52,6 @@ const useRegister = () => {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
-        alert("Registro exitoso!");
         window.location.href = "/";
       } else {
         throw new Error("Error al registrar. Por favor intenta de nuevo.");

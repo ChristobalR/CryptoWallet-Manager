@@ -22,8 +22,8 @@ const getTheme = (mode) => {
     primaryHover = '#242424'; 
     secondary = '#ef9a9a';
     secondaryHover = '#171717'; 
-    background = '#121212';
-    paper = '#1c1c1c';
+    background = '#181A20';
+    paper = '#000000';
     textPrimary = '#e0e0e0';
     textSecondary = '#9e9e9e';
     border = '#424242';

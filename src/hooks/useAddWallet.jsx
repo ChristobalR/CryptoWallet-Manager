@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 const useAddWallet = () => {
 
 
-
+  const [error, setError] = useState(null); 
 const [newWalletName, setNewWalletName] = useState("");
 const [showForm, setShowForm] = useState(false);
 
 const handleAddWallet = () => {
   const token = localStorage.getItem("token");
-
+ console.log("test")
   fetch("https://apichris.vercel.app/addwallet", {
     method: "POST",
     headers: {
