@@ -9,6 +9,10 @@ const Navbar = ({ userData }) => {
     navigate('/login'); // Cambia la ruta a '/login'
   };
 
+  const pressLogo = () => {
+    navigate('/')
+  }
+
   const handleLogout = () => {
     localStorage.removeItem("token"); // Elimina el token
     localStorage.setItem("logged", "false"); // Actualiza el estado de logged
@@ -33,7 +37,8 @@ const Navbar = ({ userData }) => {
         <img 
           src="/3.png" 
           alt="Logo" 
-          style={{ height: "35px", width: "auto" }}
+          onClick={pressLogo}
+          style={{ height: "35px", width: "auto", cursor:'pointer'}}
         />
 
         {/* Verifica si el usuario está logueado */}
